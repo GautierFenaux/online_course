@@ -4,7 +4,7 @@ const port = 8000;
 const bcrypt = require("bcrypt");
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
-
+const verifyJWT = require('./middleware/verifyJWT');
 /**
  * Import the database connection file.
  */
@@ -26,6 +26,10 @@ app.use(cookieParser());
 app.use('/register', require('./routes/api/register'));
 app.use('/auth', require('./routes/api/auth'));
 app.use('/logout', require('./routes/api/logout'));
+
+
+app.use(verifyJWT);
+app.use('/lesson', require('./routes/api/lesson'));
 
 
 /**

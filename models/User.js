@@ -28,6 +28,10 @@ const User = sequelize.define("user", {
     refreshToken: {
         type: DataTypes.STRING(200),
     },
+    roles: {
+        type: Sequelize.STRING,
+        defaultValue: 'Student',
+    },
     });
 
 module.exports = User;

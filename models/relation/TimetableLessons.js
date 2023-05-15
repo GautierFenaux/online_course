@@ -19,7 +19,7 @@ const TimetableLessons = sequelize.define("timetable_lesson", {
         references: {
             model: Lesson,
             key: "id"
-        }
+        },
     }
     });
 
