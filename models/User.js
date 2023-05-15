@@ -1,7 +1,5 @@
-
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-
 
 /**
  * Define a model that can be managed by Sequelize.
@@ -31,4 +29,5 @@ const User = sequelize.define("user", {
         type: DataTypes.STRING(200),
     },
     });
+
 module.exports = User;

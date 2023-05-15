@@ -5,12 +5,10 @@ const jwt = require('jsonwebtoken');
 
 const handleLogin = async (req, res) => {
 
-   
 
     const user = req.body.username;
-    const lastname = req.body.lastname;
     const pwd = req.body.password;
-    const email = req.body.email;
+
 
     if (!user || !pwd)
       return res
@@ -41,10 +39,11 @@ const handleLogin = async (req, res) => {
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
         );
+
         //Saving refreshToken with current user
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
-        console.log(result);
+
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
         res.json({ accessToken });
     } else {

@@ -3,6 +3,7 @@ const app = express();
 const port = 8000;
 const bcrypt = require("bcrypt");
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 
 /**
  * Import the database connection file.
@@ -12,37 +13,20 @@ const db = require("./config/database");
 /**
  * Import the Post model.
  */
-const PostModel = require("./models/Post");
+const Timetable = require("./models/Timetable");
 const User = require("./models/User");
+const Lesson = require('./models/Lesson');
+const TimetableLessons = require('./models/relation/TimetableLessons');
+
 
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/register', require('./routes/api/register'));
 app.use('/auth', require('./routes/api/auth'));
+app.use('/logout', require('./routes/api/logout'));
 
-
-/**
- * Handle the POST request to create a post.
- */
-// app.post("/register", (req, res, next) => {
-//   console.log("Avant la création du record"); // Message console ajouté
-
-  
-//     // encrypt password
-//     const hashedPwd = req.body.password 
-//     const result = User.create({
-//       "firstname": req.body.firstname,
-//       "lastname": req.body.lastname,
-//       "email": req.body.email,
-//       "password": hashedPwd,
-//     });
-//     //Create and Store new user
-//     console.log(result);
-//     res.status(201).json({'success': 'New user ' + req.body.firstname + ' created!'});
-
-//   console.log("Après la création du record"); // Message console ajouté
-// });
 
 /**
  * Create a anonymous function to establish the database connection.
@@ -61,12 +45,19 @@ const initApp = async () => {
         /**
          * Syncronize the Post model.
          */
-        PostModel.sync({
-            alter: true,
-        });
         User.sync({
           alter: true,
-        })
+        });
+        Lesson.sync({
+            alter: true,
+        });
+        Timetable.sync({
+            alter: true,
+        });
+        TimetableLessons.sync({
+            alter: true,
+        }); 
+        
         /**
          * Start the web server on the specified port.
          */
