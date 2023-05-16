@@ -13,6 +13,12 @@ const Timetable = sequelize.define("timetable", {
     },
     });
 
+    // Timetable.associate = (models) => {
+    //     Timetable.belongsToMany(models.Lesson, { as: 'TimetablesForLesson', through: models.TimetableLesson, foreignKey: 'timetableID'});
+    // }
+
+    // Timetable.belongsToMany(Lesson, { through: 'Timetable_Lesson' });
+
 
 Timetable.belongsTo(User);
 module.exports = Timetable;

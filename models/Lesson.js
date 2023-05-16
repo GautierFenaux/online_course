@@ -12,8 +12,7 @@ const Lesson = sequelize.define("lesson", {
     },
     date: {
         type: DataTypes.DATE,
-        allowNull: true,
-        unique: true,
+        unique: false,
     },
     topic: {
         type: DataTypes.STRING
@@ -22,5 +21,10 @@ const Lesson = sequelize.define("lesson", {
         type: DataTypes.STRING(100),
     },
     });
+
+    // Lesson.associate = (models) => {
+    //     Lesson.belongsToMany(models.Timetable, { as: 'LessonsInTimetable', through: models.TimetableLesson, foreignKey: 'lessonID'});
+    // }
+    // Lesson.belongsToMany(Timetable, { through: 'Timetable_Lesson' });
 
 module.exports = Lesson;
