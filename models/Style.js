@@ -1,16 +1,17 @@
-
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const User = require('./User');
 
 /**
  * Define a model that can be managed by Sequelize.
  */
-const Timetable = sequelize.define("timetable", {
+const Style = sequelize.define(
+  "style",
+  {
     name: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
-    });
+  },
+  { timestamps: false }
+);
 
-Timetable.belongsTo(User);
-module.exports = Timetable;
+module.exports = Style;

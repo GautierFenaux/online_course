@@ -1,33 +1,33 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../config/database");
-const Timetable = require('../Timetable');
-const Lesson = require('../Lesson');
+const User = require('../User');
+const Style = require('../Style');
 
 /**
  * Define a model that can be managed by Sequelize.
  */
-const TimetableLessons = sequelize.define("timetable_lesson", {
-    timetableId: {
+const UserStyle = sequelize.define("user_style", {
+    userId: {
         type: Sequelize.INTEGER,
         references: {
-            model: Timetable,
+            model: User,
             key: "id"
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
-        // unique: 'unique-timetable-per-lesson',
     },
-    
-    lessonId: {
+    styleId: {
         type: Sequelize.INTEGER,
         references: {
-            model: Lesson,
+            model: Style,
             key: "id"
         },
         onDelete: 'cascade',
         onUpdate: 'cascade',
-        // unique: 'unique-timetable-per-lesson'
     }
-    });
+    }, {timestamps: false});
 
-module.exports = TimetableLessons;
+    User.belongsToMany(Style, { through: 'user_style'});
+    Style.belongsToMany(User, { through: 'user_style' });
+
+module.exports = UserStyle;

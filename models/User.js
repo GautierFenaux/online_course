@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-
+const Level = require('../models/Level');
+const Style = require('../models/Style');
 /**
  * Define a model that can be managed by Sequelize.
  */
@@ -33,5 +34,7 @@ const User = sequelize.define("user", {
         defaultValue: 'Student',
     },
     });
-
+    Level.hasMany(User);
+    User.belongsTo(Level);
+    
 module.exports = User;
