@@ -1,19 +1,19 @@
 const Lesson = require("../models/Lesson");
 const Timetable = require("../models/Timetable");
 const TimetableLesson = require('../models/relation/TimetableLessons');
-
+const jwt = require('jsonwebtoken');
 
 
 const getAllLessons = async (req, res) => {
-  const lessons = await Lesson.find();
+  const lessons = await Lesson.findAll();
   if (!lessons) return res.status(204).json({ message: "No lessons found." });
   res.json(lessons);
 };
 
 /*
-Relier la leçon à l'emploi du temps
-Relier la leçon à un professeur 
+Seul le professeur peut créer la leçon. 
 
+- Leçon relié à l'emploi du temps du professeur : ok -
 */
 const createNewLesson = async (req, res) => {
   if (!req?.body?.numberOfHours || !req?.body?.instrument) {
@@ -22,19 +22,9 @@ const createNewLesson = async (req, res) => {
       .json({ message: "Veuillez donner un nombre d'heure ou un instrument." });
   }
 
-  //    const timetable = await Timetable.findOne({ where: { userId: 8 } });
-  //    timetable.setLesson(1);
-  //    console.log(Lesson.setTimetable(8));
-  //    console.log(timetable);
-
-//   const amidala = await User.create({ username: "p4dm3", points: 1000 });
-//   const queen = await Profile.create({ name: "Queen" });
-//   await amidala.addProfile(queen, { through: { selfGranted: false } });
-//   const result = await User.findOne({
-//     where: { username: "p4dm3" },
-//     include: Profile,
-//   });
-//   console.log(result);
+  const token = req.headers.authorization?.split(' ')[1];
+  const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+ 
 
   try {
     const lesson = await Lesson.create(
@@ -44,14 +34,9 @@ const createNewLesson = async (req, res) => {
         date: req.body.date,
       },
     );
-    
-    const timetable = await Timetable.findOne({ where: { userId: 8 } });
-    const t = await TimetableLesson.create({ LessonID: lesson.id, TimetableID: timetable.id });
-    // t.set('timetableID', 8);
-    // t.set('lessonID', lesson.id);
-    await t.save();
-
-
+    const timetable = await Timetable.findOne({ where: { userId: decodedToken.UserInfo.id } });
+    const timetableLessonRelation = await TimetableLesson.create({ LessonID: lesson.id, TimetableID: timetable.id });
+    await timetableLessonRelation.save();
     res.status(201).json(lesson);
   } catch (err) {
     console.log(err);
@@ -85,23 +70,23 @@ const deleteLesson = async (req, res) => {
       .status(400)
       .json({ message: `lesson ID ${req.body.id} not found` });
   }
-  const lesson = await Lesson.findOne({ _id: req.body.id }).exec();
+  const lesson = await Lesson.findOne({ where: { id: req.body.id } });
 
   if (!lesson) {
     return res
       .status(400)
       .json({ message: `lesson ID ${req.body.id} not found` });
   }
-  const result = await Lesson.deleteOne();
+  const result = await lesson.destroy();
 
-  res.json(lesson);
+  res.json(result);
 };
 
 const getLesson = async (req, res) => {
   if (!req?.params?.id)
     return res.status(400).json({ message: `lesson ID is required` });
 
-  const lesson = await Lesson.findOne({ _id: req.params.id });
+  const lesson = await Lesson.findOne({ where: { id: req.params.id }});
 
   if (!lesson) {
     return res

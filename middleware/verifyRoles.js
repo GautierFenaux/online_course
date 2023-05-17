@@ -4,7 +4,7 @@ const verifyRoles = (allowedRoles) => {
         const roles = allowedRoles;
         
         // console.log(roles);
-        console.log(req.roles);
+        // console.log(req.roles);
 
         const result = req.roles === 'Teacher' ? true : false
 
