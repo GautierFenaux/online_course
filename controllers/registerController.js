@@ -9,8 +9,8 @@ const { Op } = require('sequelize');
 
 /*
   Créer le nouvel utilisateur et son emploi du temps
-
 */
+
 const handleNewUser = async (req, res) => {
   const username = req.body.username;
   const lastname = req.body.lastname;
@@ -37,7 +37,7 @@ const handleNewUser = async (req, res) => {
         email: email,
       });
     
-      console.log(styles);
+    console.log(styles);
     const levelToSet = await Level.findOne({where : { level: level }});
     user.setLevel(levelToSet.id);
 

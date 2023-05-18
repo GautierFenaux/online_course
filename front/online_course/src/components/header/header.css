@@ -1,0 +1,23 @@
+.header {
+    background-color: #77FDAF ;
+    margin-bottom: 2000px;
+}
+
+.img-container {
+    width: 30%;
+}
+
+img {
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-around;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+} 
