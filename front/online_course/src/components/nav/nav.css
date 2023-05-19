@@ -1,0 +1,11 @@
+nav {
+    background-color: var(--color-subtext);
+}
+
+.flex li {
+    background-color: #76E3E2;
+    padding: 0.5em 1.5em;
+    border-radius: 1.5em;
+    /* border: 2px solid var(--color-subtext); */
+    color: var(--color-text) ;
+}

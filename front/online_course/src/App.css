@@ -5,7 +5,43 @@
     scroll-behavior: smooth;
 }
 
+li, p, h2 {
+    font-family: var(--font-family);
+    font-weight: 200;
+    letter-spacing: 0.7px;
+}
 
 .section_padding {
     padding: 4rem 6rem;
 }
+
+.section_padding-sides {
+    padding: 1.5rem 6rem;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-around;
+}
+
+.flex-row-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+li {
+    list-style-type: none;
+    margin-left: 3em;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited { color: inherit; text-decoration: underline; }
