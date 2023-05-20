@@ -12,6 +12,7 @@ const { Op } = require('sequelize');
 */
 
 const handleNewUser = async (req, res) => {
+  console.log('dfs');
   const username = req.body.username;
   const lastname = req.body.lastname;
   const pwd = req.body.password;
@@ -38,19 +39,19 @@ const handleNewUser = async (req, res) => {
       });
     
     console.log(styles);
-    const levelToSet = await Level.findOne({where : { level: level }});
+    const levelToSet = await Level.findOne({where : { level: 'débutant' }});
     user.setLevel(levelToSet.id);
+    
+    // const stylesToAdd = await Style.findAll({
+    //   where: {
+    //     name: {
+    //       [Op.in]: styles
+    //     }
+    //   }
+    // });
 
-    const stylesToAdd = await Style.findAll({
-      where: {
-        name: {
-          [Op.in]: styles
-        }
-      }
-    });
 
-
-    user.addStyles(stylesToAdd);
+    // user.addStyles(stylesToAdd);
     
 
     const timetable = Timetable.create({
