@@ -12,6 +12,7 @@ function App() {
     // ... perhaps some authentication logic to protect routes?
     return (
       <>
+        <Nav/>
         <Header />
         <Outlet />
       </>
@@ -20,7 +21,7 @@ function App() {
 
   return (
     <div className="App">
-      <Nav />
+      
       <Routes>
         <Route element={<HomeLayout />}>
           <Route path="/" element={<Home />} />

@@ -81,7 +81,7 @@ const Informations = (props) => {
   // Test the email against the regex
   return emailRegex.test(email);
   }
-  console.log(formData.informations.email)
+  
   return (
     <form onSubmit={preventFunc}>
       <label>

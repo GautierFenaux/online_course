@@ -15,7 +15,7 @@ export default function Styles(props) {
         }
     })
 
-    props.modifyIndex(3, styleData);
+    props.modifyIndex(4, styleData);
 
   };
 
