@@ -8,7 +8,16 @@
   
   --color-bg: #77FDAF ;
   --color-footer : #76E3E2;
-  --color-text: #121212;
+  --color-text: #082c4c;
   --color-subtext: #FAC469;
+}
+
+
+.header {
+  grid-area: header;
+}
+
+.nav {
+  grid-area: nav;
 }
 

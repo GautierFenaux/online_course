@@ -5,22 +5,21 @@ import Authentification from "../authentification/Authentification";
 
 const Nav = () => {
   return (
-    <nav className="flex-row-between section_padding-sides">
+    // <nav className="nav flex-row-between section_padding-sides">
+    <nav className="nav flex-row-between section_padding-sides">
       <div>
         <li>
-          <NavLink to="/" activeClassName="active">onlineCourse.</NavLink>
+          <NavLink to="/">onlineCourse.</NavLink>
         </li>
       </div>
+      
       <div className="flex">
-        <li>
-          <NavLink to="/donner_des_cours" activeClassName="active">Donner des cours</NavLink>
+        <li className="li">
+          <NavLink to="/donner_des_cours">Donner des cours</NavLink>
         </li>
-        <li>
-          <NavLink to="/authentification" activeClassName="active">Connexion</NavLink>
+        <li className="li">
+          <NavLink to="/authentification">Connexion</NavLink>
         </li>
-        {/* <li>
-          <NavLink to="/contact" activeClassName="active">Contact</NavLink>
-        </li> */}
       </div>
     </nav>
   );
@@ -28,3 +27,6 @@ const Nav = () => {
 
 
 export default Nav;
+
+
+

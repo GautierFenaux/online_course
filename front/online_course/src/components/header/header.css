@@ -1,55 +1,83 @@
 .header {
     background-color: #FAC469 ;
     margin-bottom: 2000px;
-    padding-top: 2em;
 }
 
 .img-container {
-    width: 25%;
-    height: 100%;
+    padding: 0 3em;
+    margin-top: 2rem;
 }
 
 img {
-    width: 100%;
+    width: 17rem;
     border-radius: 50%;
     max-height: 100%;
 }
 
 
 header svg {
-    margin-bottom: -45px;
+    margin-bottom: -5px;
+    background-color: #FAC469;
 }
 
-header div{
-    max-height: 450px;
-}
-
-h2 {
-    font-size: 3em;
-    color: #082c4c;
-
-}
-
-p {
-    font-size: 1.5em;
-    color:  #082c4c;
-
-}
 
 .presentation-container {
-    width: 50%;
-    min-height: 100%;
+    width: 100%;
+    padding: 0 2em;
+    text-align: center;
 }
 
+.presentation-container > * {
+    margin: 3rem 0;
+}
+
+
 .presentation-container button {
-    width: 50%;
     background-color: var(--color-footer);
-    padding: 0.5em 1.5em;
+    padding: 0.5em 0.5em;
     border-radius: 1.5em;
     /* border: 2px solid var(--color-subtext); */
     color: var(--color-text) ;
-    width: 50%;
-    font-size: 1.5em;
+    width: 12rem;
     text-decoration: none;
     border: none;
+    margin:0 auto;
+}
+
+@media (min-width: 800px) { 
+    header div{
+        height: 450px;
+        max-height: 455px;
+    }
+    header svg {
+        margin-bottom: -45px;
+    }
+
+    .presentation-container {
+        width: 50%;
+        height: 100%;
+        text-align: inherit;
+    }
+
+    .presentation-container > * {
+        margin: 0;
+    }
+
+    .presentation-container button {
+        width: 50%;
+        padding: 0.5em 1.5em;
+    }
+    
+    .img-container {
+        width: 50%;
+        height: 100%;
+        margin-top: 0;
+    }
+    
+
+    img {
+        width: 24rem;
+        object-fit: cover;
+    }
+    
 }
