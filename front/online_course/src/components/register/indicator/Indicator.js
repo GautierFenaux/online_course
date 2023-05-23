@@ -1,6 +1,6 @@
 import React from 'react'
 import './indicator.css'
-
+import { FaAddressBook, FaSortAmountUp, FaMusic} from 'react-icons/fa';
 
 export default function Indicator({formIndex}) {
   
@@ -12,11 +12,8 @@ export default function Indicator({formIndex}) {
             <div className="line upper-line"
             style={{
                 width: formIndex === 1 ? "0%"
-                : formIndex === 2 ? "0%"
-                : formIndex === 3 ? "30%"
-                : formIndex === 4 ? "60%"
-                : formIndex === 5 ? "90%"
-                : formIndex === 6 ? "100%"
+                : formIndex === 2 ? "50%"
+                : formIndex === 3 ? "98%"
                 : ""
             }}
             > </div>
@@ -27,17 +24,15 @@ export default function Indicator({formIndex}) {
 
         <div className='container-img'>
             <div className="bloc-img">
-                {/* <img src={healthy} alt="" /> */}
+            <FaAddressBook className='icon'size={32}/>
             </div> 
             <div className="bloc-img">
-                {/* <img src={love} alt="" /> */}
+                <FaSortAmountUp  className='icon' size={28}/>
             </div> 
             <div className="bloc-img">
+                <FaMusic className='icon' size={28}/>
                 {/* <img src={allergy} alt="" /> */}
             </div> 
-            <div className="bloc-img">
-                {/* <img src={diet} alt="" /> */}
-            </div>
         </div>
 
     </div>

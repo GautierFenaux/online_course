@@ -4,6 +4,8 @@ import "./header.css";
 import { NavLink } from 'react-router-dom';
 import trompette from "../../assets/trompette.png";
 import notes from "../../assets/notes_musique.png";
+import  instruments from "../../assets/instruments.png";
+
 import useWindowDimensions  from '../../hooks/UseWindowDimensions'
 
 const pathd =
@@ -41,7 +43,7 @@ const Header = () => {
             Apprenez l'instrument que vous avez toujours voulu savoir jouer sans
             bouger de chez vous !
           </p>
-          <button><NavLink to="/register" activeClassName="active">Je m'inscris</NavLink></button>
+          <button><NavLink to="/register" className="header-button">Je m'inscris</NavLink></button>
         </div>
         <div className="img-container flex flex-center-row">
           <img src={trompette} alt="" />

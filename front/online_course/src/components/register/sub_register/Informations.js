@@ -1,5 +1,9 @@
 import { React, useState } from "react";
 import { usePasswordValidation } from "../../../hooks/UsePasswordValidation";
+import './subForm.css';
+import { FaCheck, FaTimes } from "react-icons/fa";
+
+
 
 const Informations = (props) => {
   
@@ -83,13 +87,14 @@ const Informations = (props) => {
   }
   
   return (
-    <form onSubmit={preventFunc}>
+    <form className="flex-column information-form" onSubmit={preventFunc}>
+      <h2>Créer un compte</h2>
       <label>
-        Username:
+        Username
         <input type="text" onChange={(e) => handleInfo(e, "username")} />
       </label>
       <label>
-        First Password:
+        First Password
         <input
           required
           onChange={(e) => handleInfo(e, "firstPass")}
@@ -97,7 +102,7 @@ const Informations = (props) => {
         />
       </label>
       <label>
-        Second Password:
+        Confirm Password
         <input
           required
           onChange={(e) => handleInfo(e, "secondPass")}
@@ -105,35 +110,34 @@ const Informations = (props) => {
         />
       </label>
       <label>
-        Email:
+        Email
         <input required type="email" onChange={(e) => handleInfo(e, "email")} />
       </label>
 
-      <div>
+      <div className="passwordCheck-container">
         <ul>
           <li>
-            Valid Length: {validLength ? <span>True</span> : <span>False</span>}
+            <span>Valid Length </span> {validLength ? <FaCheck/> : <FaTimes/>}
           </li>
           <li>
-            Has a Number: {hasNumber ? <span>True</span> : <span>False</span>}
+            <span>Has a Number </span> {hasNumber ? <FaCheck/> : <FaTimes/>}
           </li>
           <li>
-            UpperCase: {upperCase ? <span>True</span> : <span>False</span>}
+            <span>UpperCase </span> {upperCase ? <FaCheck/> : <FaTimes/>}
           </li>
           <li>
-            LowerCase: {lowerCase ? <span>True</span> : <span>False</span>}
+            <span>LowerCase </span> {lowerCase ? <FaCheck/> : <FaTimes/>}
           </li>
-          <li>Match: {match ? <span>True</span> : <span>False</span>}</li>
+          <li><span>Match </span> {match ? <FaCheck/> : <FaTimes/>}</li>
           <li>
-            Special Character:{" "}
-            {specialChar ? <span>True</span> : <span>False</span>}
+            <span>Special Character:</span>{" "}
+            {specialChar ? <FaCheck/> : <FaTimes/>}
           </li>
-          <li>isValid : {isValid ? <span>True</span> : <span>False</span>}</li>
         </ul>
       </div>
       
-      <div className="container-nav-btns">
-        <button disabled={isValid && checkEmail(formData.informations.email) ? false : true} onClick={() => props.modifyIndex(2, formData)}>Valider</button>
+      <div className="container-btns flex-row-center">
+        <button className="button " disabled={isValid && checkEmail(formData.informations.email) ? false : true} onClick={() => props.modifyIndex(2, formData)}>Valider</button>
       </div>
     </form>
   );

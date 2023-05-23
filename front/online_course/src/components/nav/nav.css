@@ -3,7 +3,7 @@ nav {
 }
 
 .flex li {
-    background-color: #76E3E2;
+    background: var(--gradient-text);;
     padding: 0.5em 1.5em;
     border-radius: 1.5em;
     /* border: 2px solid var(--color-subtext); */

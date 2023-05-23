@@ -3,9 +3,10 @@
 
  --font-family: 'MuseoModerno', sans-serif;
 
-  --gradient-text: linear-gradient(89.97deg, #76E3E2 1.84%, #FAC469 102.67%);
-  --gradient-bar: linear-gradient(103.22deg, #76E3E2-13.86%, #F49867 99.55%);
-  
+  --gradient-text: linear-gradient(89.97deg, #76E3E2 1.84%,  #6feaa3 102.67%);
+  --gradient-bar: linear-gradient(103.22deg, #FAC469 -13.86%, #76E3E2 99.55%);
+  --gradient-register: linear-gradient(270deg, rgba(250, 196, 105, 1) 33%, rgba(111, 234, 163, 1) 63%, rgba(118, 227, 226, 1) 100%);
+
   --color-bg: #77FDAF ;
   --color-footer : #76E3E2;
   --color-text: #082c4c;

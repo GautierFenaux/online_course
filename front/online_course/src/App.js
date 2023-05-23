@@ -8,7 +8,9 @@ import Register from "./components/register/Register";
 import HamburgerMenu from "./components/hamburgerMenu/HamburgerMenu";
 
 function App() {
+
   const HomeLayout = () => {
+    
     const { height, width } = useWindowDimensions();
 
     return (
