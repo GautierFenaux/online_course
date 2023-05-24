@@ -5,8 +5,9 @@ import './subForm.css' ;
 
 const REGISTER_URL = '/register'
 const ValidationStep = ({data}) => {
-    
-    const {level, styles, informations} = data ;
+  
+ 
+  const {level, styles, informations} = data ;
   
   const handleSubmit = async () => {
       try {
@@ -34,11 +35,14 @@ const ValidationStep = ({data}) => {
   };
 
 
-  return (
+  return ( 
     <form>
       <p>Cliquez sur le bouton ci-dessous pour valider votre inscription</p>
       <div className="container-btns">
-      <button type="button" onClick={handleButtonClick}>Je m'inscris</button>
+        <button type="button" className="prev">
+          Précédent
+        </button>
+        <button onClick={handleButtonClick}>Valider</button>
       </div>
     </form>
   );

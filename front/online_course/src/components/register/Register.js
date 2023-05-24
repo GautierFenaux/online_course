@@ -37,7 +37,7 @@ export default function Register() {
     <Informations modifyIndex={modifyIndex} />,
     <Level modifyIndex={modifyIndex} />,
     <Styles modifyIndex={modifyIndex} />,
-    <ValidationStep data={allFormData} />,
+    <ValidationStep index='4' data={allFormData}/>,
   ];
 
   return (

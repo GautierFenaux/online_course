@@ -117,22 +117,22 @@ const Informations = (props) => {
       <div className="passwordCheck-container">
         <ul>
           <li>
-            <span>Valid Length </span> {validLength ? <FaCheck/> : <FaTimes/>}
+            <span>Au moins 8 caractères </span> {validLength ? <FaCheck/> : <FaTimes/>}
           </li>
           <li>
-            <span>Has a Number </span> {hasNumber ? <FaCheck/> : <FaTimes/>}
+            <span>Possède un chiffre </span> {hasNumber ? <FaCheck/> : <FaTimes/>}
           </li>
           <li>
-            <span>UpperCase </span> {upperCase ? <FaCheck/> : <FaTimes/>}
-          </li>
-          <li>
-            <span>LowerCase </span> {lowerCase ? <FaCheck/> : <FaTimes/>}
-          </li>
-          <li><span>Match </span> {match ? <FaCheck/> : <FaTimes/>}</li>
-          <li>
-            <span>Special Character:</span>{" "}
+            <span>Possède un caractère spécial </span>{" "}
             {specialChar ? <FaCheck/> : <FaTimes/>}
           </li>
+          <li>
+            <span>Possède une lettre majuscule </span> {upperCase ? <FaCheck/> : <FaTimes/>}
+          </li>
+          <li>
+            <span>Possède une lettre minuscule </span> {lowerCase ? <FaCheck/> : <FaTimes/>}
+          </li>
+          <li><span>Les mots de passe correspondent</span> {match ? <FaCheck/> : <FaTimes/>}</li>
         </ul>
       </div>
       

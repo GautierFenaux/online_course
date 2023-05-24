@@ -9,6 +9,10 @@ form label {
     padding-left: 5px ;
 }
 
+.information-form h2  {
+    margin: 1rem;
+}
+
 .passwordCheck-container {
     margin: 1rem;
 }

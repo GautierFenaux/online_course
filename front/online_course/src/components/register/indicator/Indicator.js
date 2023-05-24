@@ -14,6 +14,7 @@ export default function Indicator({formIndex}) {
                 width: formIndex === 1 ? "0%"
                 : formIndex === 2 ? "50%"
                 : formIndex === 3 ? "98%"
+                : formIndex === 4 ? "98%"
                 : ""
             }}
             > </div>

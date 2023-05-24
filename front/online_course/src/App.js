@@ -1,5 +1,5 @@
 import "./App.css";
-import { Nav, Header } from "./components";
+import { Nav, Header,MyCalendar } from "./components";
 import { Routes, Route, Outlet } from "react-router-dom";
 import useWindowDimensions  from './hooks/UseWindowDimensions'
 import Home from "./components/home/Home";
@@ -30,6 +30,8 @@ function App() {
         <Route path="/authentification" element={<Authentification />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+
+      <MyCalendar />
     </div>
   );
 }

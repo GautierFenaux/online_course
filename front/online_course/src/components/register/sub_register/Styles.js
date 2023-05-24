@@ -29,6 +29,7 @@ export default function Styles(props) {
   const handleReturn = () => {
     props.modifyIndex(2);
   };
+  
   return (
     <form className="checkbox-form flex-column" onSubmit={preventFunc}>
       <p>Quelles sont tes styles préférés ?</p>
