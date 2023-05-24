@@ -1,5 +1,7 @@
 import React from 'react'
 import axios from "../../../api/axios";
+import './subForm.css' ;
+
 
 const REGISTER_URL = '/register'
 const ValidationStep = ({data}) => {
@@ -35,7 +37,9 @@ const ValidationStep = ({data}) => {
   return (
     <form>
       <p>Cliquez sur le bouton ci-dessous pour valider votre inscription</p>
+      <div className="container-btns">
       <button type="button" onClick={handleButtonClick}>Je m'inscris</button>
+      </div>
     </form>
   );
 }

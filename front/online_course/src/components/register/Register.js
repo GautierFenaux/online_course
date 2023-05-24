@@ -52,7 +52,7 @@ export default function Register() {
           return "";
         })}
       </div>
-      <div class="note">
+      {/* <div class="note">
           <div className="note-container">
             <img alt="single note" src={singleNote} />
           </div>
@@ -74,7 +74,7 @@ export default function Register() {
           <div className="note-container">
             <img alt="single note" src={singleNote} />
           </div>
-      </div>
+      </div> */}
     </div>
   );
 }
