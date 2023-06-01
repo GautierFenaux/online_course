@@ -21,7 +21,7 @@ export const usePasswordValidation = ({
     setSpecialChar(/[ `!@#$%^&*()_+\-=\]{};':"\\|,.<>?~]/.test(firstPassword))
     setMatch(firstPassword && firstPassword === secondPassword)
   }, [firstPassword, secondPassword]);
-  // a chaque fois qu'un élément du second argument est changé il rend le composant.
+  // à chaque fois qu'un élément du second argument est changé il rend le composant.
   useEffect(() => {
     if (validLength && hasNumber && upperCase && lowerCase && specialChar && match) {
       setIsValid(true);
