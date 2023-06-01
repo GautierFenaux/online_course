@@ -3,10 +3,12 @@ import React, { useState, useEffect } from "react";
 const ModalCalendar = ({ onConfirm, closeModal, selectedEvent }) => {
   const [instrument, setInstrument] = useState("");
   const [topic, setTopic] = useState("");
-  let start;
-  let id;
+  const [id, setId] = useState("");
+  const [start, setStart] = useState("");
+
+  
   if (selectedEvent) {
-    console.log(selectedEvent._def.publicId);
+    console.log(selectedEvent);
     console.log(selectedEvent._def.extendedProps.instrument)
   }
 
@@ -14,9 +16,8 @@ const ModalCalendar = ({ onConfirm, closeModal, selectedEvent }) => {
   useEffect(() => {
     if (selectedEvent) {
       setInstrument(selectedEvent._def.extendedProps?.instrument);
-      id = selectedEvent._def.publicId;
-      start = selectedEvent._instance.range.start.toString();
-      console.log(instrument)
+      setId(selectedEvent._def.publicId);
+      setStart(selectedEvent._instance.range.start.toString());
     }
   }, [selectedEvent]);
 
@@ -25,17 +26,18 @@ const ModalCalendar = ({ onConfirm, closeModal, selectedEvent }) => {
 
   const handleConfirm = () => {
     // Pass the input values to the onConfirm callback
+    console.log('je suis là');
     onConfirm(instrument, topic, id);
     closeModal(false);
   };
   // Afficher l'instrument correpondant à l'événement tout en pouvant le modifier
-
+  // Eviter le chevauchement lors de la modification de l'événement supprimer l'événement modifié visuellement si valider
   return (
     <div className="custom-prompt">
       {selectedEvent ? (
         <div>
           <p> Modification de la lesson du : {start} </p>
-          <label for="instrument">Instrument</label>
+          <label htmlFor="instrument">Instrument</label>
           <input
             type="text"
             value={instrument}

@@ -36,10 +36,11 @@ export const MyCalendar = () => {
   }
 
   const handleModalConfirm = (instrument, topic, id) => {
-
+    console.log('handleModalConfirm active', "id ==>", id);
     if(id) {
       events.map((lesson, i) => { 
         if (lesson.id === id) {
+          
           let updatedEvents = [...events]; // Make a copy of the events array
           updatedEvents[i] = {
             ...lesson, // Copy the original lesson
@@ -56,7 +57,7 @@ export const MyCalendar = () => {
         {
           start : date.start,
           end : date.end,
-          title: topic,
+          topic: topic,
           instrument : instrument,
           id: uuid(),
         },
@@ -122,6 +123,7 @@ export const MyCalendar = () => {
         initialView='timeGridDay'
         selectMirror={true}
         dayMaxEvents={true}
+        eventOverlap={false}
         weekends={false}
         // slotMinTime="8:00:00"
         // slotMaxTime="23:00:00"
