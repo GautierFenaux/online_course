@@ -7,10 +7,10 @@ const ModalCalendar = ({ onConfirm, closeModal, selectedEvent }) => {
   const [start, setStart] = useState("");
 
   
-  if (selectedEvent) {
-    console.log(selectedEvent);
-    console.log(selectedEvent._def.extendedProps.instrument)
-  }
+  // if (selectedEvent) {
+  //   console.log(selectedEvent);
+  //   console.log(selectedEvent._def.extendedProps.instrument)
+  // }
 
 
   useEffect(() => {
@@ -26,9 +26,10 @@ const ModalCalendar = ({ onConfirm, closeModal, selectedEvent }) => {
 
   const handleConfirm = () => {
     // Pass the input values to the onConfirm callback
-    console.log('je suis là');
+   
     onConfirm(instrument, topic, id);
     closeModal(false);
+   
   };
   // Afficher l'instrument correpondant à l'événement tout en pouvant le modifier
   // Eviter le chevauchement lors de la modification de l'événement supprimer l'événement modifié visuellement si valider

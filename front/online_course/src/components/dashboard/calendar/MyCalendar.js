@@ -16,12 +16,14 @@ export const MyCalendar = () => {
   Création événément ok.
   Modification événement, vérifier l'allongement de l'event lors d'un d'n'd : ok !
 
-  Faire modal avec l'événement sélectionner pour pouvoir le modifier
+  Faire modal avec l'événement sélectionner pour pouvoir le modifier : ok !
+  Gérer la nouvelle heure de l'event lors du drop 
+  Définir les routes en back
   
   
   */ 
 
-
+  const EVENTPUT_URL = '/lesson'
   const [events, setEvents] = useState([]);
   const [modal, setModal] = useState(false);
   const [date, setDate] = useState({});
@@ -34,9 +36,11 @@ export const MyCalendar = () => {
       setModal(true);
       // console.log(events)
   }
+  // Gérer la politique des données essentielles et non essentielles lors du create
 
   const handleModalConfirm = (instrument, topic, id) => {
-    console.log('handleModalConfirm active', "id ==>", id);
+    // console.log('handleModalConfirm active', "id ==>", id);
+    console.log(selectedEvent)
     if(id) {
       events.map((lesson, i) => { 
         if (lesson.id === id) {
@@ -49,8 +53,29 @@ export const MyCalendar = () => {
           };
           setEvents(updatedEvents); // Update the events state with the modified array
         }
+        setSelectedEvent(null);
       })
       // Mettre fonction post ici ? Récupérer l'id au niveau du back
+    //   async () => {
+    //     try {
+    //       const response = await axios.post(REGISTER_URL, JSON.stringify({
+    //             username: informations.username,
+    //             email: informations.email,
+    //             password: informations.password,
+    //             level: level,
+    //             styles: styles
+    //           }), {
+    //             headers: {'Content-Type': 'application/json'},
+    //             withCredentials: true
+    //           });
+    //           console.log(response.data);
+    //           console.log(JSON.stringify(response));
+    //     } catch (err) {
+    //       if(!err?.response) {
+    //           console.log('Err:', err);
+    //       }
+    //     }
+    // }
     } else if (topic) {
       setEvents([
         ...events,
@@ -62,8 +87,28 @@ export const MyCalendar = () => {
           id: uuid(),
         },
       ]);
+      //   async () => {
+    //     try {
+    //       const response = await axios.post(REGISTER_URL, JSON.stringify({
+    //             username: informations.username,
+    //             email: informations.email,
+    //             password: informations.password,
+    //             level: level,
+    //             styles: styles
+    //           }), {
+    //             headers: {'Content-Type': 'application/json'},
+    //             withCredentials: true
+    //           });
+    //           console.log(response.data);
+    //           console.log(JSON.stringify(response));
+    //     } catch (err) {
+    //       if(!err?.response) {
+    //           console.log('Err:', err);
+    //       }
+    //     }
+    // }
     }
-
+    
     setModal(false);
   };
 
@@ -82,7 +127,7 @@ export const MyCalendar = () => {
   
   
 
-    const handleDrop = (info) => {
+    const handleResize = (info) => {
       // Récupérer l'event qui a cet id dans le tableau des event et le modifier
       // console.log('infoEventEnd : ',info.event.end);
 
@@ -103,7 +148,9 @@ export const MyCalendar = () => {
       // console.log('events After Resize : ', events)
 
     }
-    // console.log('events After Resize : ', events)
+    const handleDrop = (info) => {
+      console.log(info.event.start)
+    }
   return (
     <div className="calendar-container">
       <FullCalendar  
@@ -125,8 +172,8 @@ export const MyCalendar = () => {
         dayMaxEvents={true}
         eventOverlap={false}
         weekends={false}
-        // slotMinTime="8:00:00"
-        // slotMaxTime="23:00:00"
+        slotMinTime="8:00:00"
+        slotMaxTime="23:00:00"
         dateClick={handleDateClick}
         // Permet d'afficher les événements sur le
         // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
@@ -135,11 +182,12 @@ export const MyCalendar = () => {
         // eventAdd={addEvent}
         //  ref={calendarRef}
         ref={calendarRef}
-        eventResize={handleDrop}
+        eventResize={handleResize}
+        eventDrop={handleDrop}
       />
 
       {modal && <ModalCalendar onConfirm={handleModalConfirm} closeModal={setModal} />}
-      {selectedEvent && <ModalCalendar selectedEvent={selectedEvent} onConfirm={handleModalConfirm} closeModal={setModal} setEventToNull={() => setSelectedEvent(null)} /> }
+      {selectedEvent && <ModalCalendar selectedEvent={selectedEvent} closeModal={setModal}  onConfirm={handleModalConfirm} /> }
     </div>
   );
 };

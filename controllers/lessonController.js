@@ -24,16 +24,18 @@ const createNewLesson = async (req, res) => {
 
   const token = req.headers.authorization?.split(' ')[1];
   const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
- 
+
 
   try {
     const lesson = await Lesson.create(
       {
-        numberOfHours: req.body.numberOfHours,
+        // numberOfHours: req.body.numberOfHours,
         instrument: req.body.instrument,
-        date: req.body.date,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
       },
     );
+    
     const timetable = await Timetable.findOne({ where: { userId: decodedToken.UserInfo.id } });
     const timetableLessonRelation = await TimetableLesson.create({ LessonID: lesson.id, TimetableID: timetable.id });
     await timetableLessonRelation.save();

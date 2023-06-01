@@ -10,7 +10,11 @@ const Lesson = sequelize.define("lesson", {
     numberOfHours: {
         type: DataTypes.INTEGER,
     },
-    date: {
+    startDate: {
+        type: DataTypes.DATE,
+        unique: false,
+    },
+    endDate: {
         type: DataTypes.DATE,
         unique: false,
     },
