@@ -1,11 +1,14 @@
 import "./App.css";
 import { Nav, Header,MyCalendar } from "./components";
 import { Routes, Route, Outlet } from "react-router-dom";
+import { AuthProvider } from "./context/AuthProvider";
+import { PrivateRoutes } from "./utils/PrivateRoutes";
 import useWindowDimensions  from './hooks/UseWindowDimensions'
 import Home from "./components/home/Home";
 import Authentification from "./components/authentification/Authentification";
 import Register from "./components/register/Register";
 import HamburgerMenu from "./components/hamburgerMenu/HamburgerMenu";
+import Dashboard from "./components/dashboard/Dashboard";
 
 function App() {
 
@@ -25,13 +28,20 @@ function App() {
 
   return (
     <div className="app">
+      <AuthProvider>
       <Routes>
         <Route  path="/" element={<HomeLayout />} />
         <Route path="/authentification" element={<Authentification />} />
         <Route path="/register" element={<Register />} />
+        
+        <Route element={<PrivateRoutes/>}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+        
       </Routes>
 
-      <MyCalendar />
+      {/* <MyCalendar /> */}
+      </AuthProvider>
     </div>
   );
 }

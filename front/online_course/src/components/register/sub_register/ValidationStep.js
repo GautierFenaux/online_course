@@ -25,7 +25,9 @@ const ValidationStep = ({data}) => {
             console.log(JSON.stringify(response));
       } catch (err) {
         if(!err?.response) {
-            console.log('Err:', err);
+          // console.log()
+          // console.log('err', err.config);
+          console.log(JSON.stringify(err));
         }
       }
   };
@@ -42,7 +44,7 @@ const ValidationStep = ({data}) => {
         <button type="button" className="prev">
           Précédent
         </button>
-        <button onClick={handleButtonClick}>Valider</button>
+        <button type="button" onClick={handleButtonClick}>Valider</button>
       </div>
     </form>
   );

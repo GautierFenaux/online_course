@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const handleLogin = async (req, res) => {
 
-
+    console.log('ici ?');
     const user = req.body.username;
     const pwd = req.body.password;
 
@@ -16,6 +16,7 @@ const handleLogin = async (req, res) => {
         .json({ message: "Username and password are required!" });
     
     const foundUser = await User.findOne({ where: { firstname: user } });
+    console.log(foundUser);
     if(!foundUser) return res.sendStatus(401); //Unauthorized
 
     //Evaluate password
@@ -49,6 +50,7 @@ const handleLogin = async (req, res) => {
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
         res.json({ accessToken });
     } else {
+        console.log('ici');
         res.sendStatus(401);
     }
 }
