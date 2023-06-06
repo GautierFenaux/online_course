@@ -1,19 +1,24 @@
 import React, {useRef, useState, useEffect, useContext}from 'react';
 import './authentification.css';
-import  AuthContext  from '../../context/AuthProvider';
 import axios from '../../api/axios';
+import useAuth from '../../hooks/useAuth';
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 const LOGIN_URL = '/auth'
 const Authentification = () => {
 
-  const { setAuth } = useContext(AuthContext);
+  const {setAuth } = useAuth();
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
   const userRef = useRef();
   const errRef = useRef();
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
+  
 
   useEffect(() => {
     userRef.current.focus();
@@ -25,7 +30,7 @@ const Authentification = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
       const response = await axios.post(LOGIN_URL,
         JSON.stringify({username: user, password: pwd}), {
@@ -34,13 +39,20 @@ const Authentification = () => {
         });
 
         console.log(JSON.stringify(response.data));
-        const token = response?.data?.token;
+        const accessToken = response?.data?.accessToken;
         const roles = response?.data?.roles;
-        const refreshToken = response?.data?.refresh_token;
-        setAuth({user, pwd, roles, token, refreshToken})
-      setUser("");
-      setPwd("");
-      setSuccess(true);
+        const refreshToken = response?.data?.refreshToken;
+        console.log(user);
+        
+        // Problème avec cette méthode
+        setAuth({user, pwd, roles, accessToken, refreshToken});
+        console.log('après setAuth');
+        setUser("");
+        setPwd("");
+        navigate(from, { replace: true });
+       
+     
+      
     } catch (err) {
       if(!err?.response) {
         setErrMsg('No server response');
@@ -57,14 +69,6 @@ const Authentification = () => {
     
   // rediriger vers le dashboard
   return (
-    <>
-      {success ? (
-        <section>
-          <h1>You are logged in! </h1>
-          <br />
-        
-        </section>
-      ) : (
         <section>
           <p
             ref={errRef}
@@ -99,9 +103,7 @@ const Authentification = () => {
             </span>
           </form>
         </section>
-      )}
-    </>
-  );
+      )
 }
 
 
