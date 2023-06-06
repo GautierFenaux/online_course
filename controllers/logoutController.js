@@ -1,8 +1,8 @@
 const User = require('../models/User');
 
 const handleLogout = async (req, res) => {
+
     // On client, also delete the accessToken
-    console.log('yolo');
     const cookies = req.cookies;
     console.log(cookies);
     //Check si il y a des cookies puis si il y a un jwt dans ces mêmes cookies
@@ -19,12 +19,12 @@ const handleLogout = async (req, res) => {
 
     //delete refreshToken in db
     foundUser.refreshToken = '';
-    const result = await User.destroy({
-        where: {
-            refreshToken: refreshToken
-        }
-      });
-    console.log(result);
+    // const result = await User.destroy({
+    //     where: {
+    //         refreshToken: refreshToken
+    //     }
+    //   });
+    // console.log(result);
 
     res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true }); // secure: true - only serves on https
 

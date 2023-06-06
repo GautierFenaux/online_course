@@ -41,6 +41,8 @@ app.use(cors(corsOptions));
 app.use("/register", require("./routes/api/register"));
 app.use("/auth", require("./routes/api/auth"));
 app.use("/logout", require("./routes/api/logout"));
+app.use('/refresh', require('./routes/api/refresh'));
+
 
 app.use(verifyJWT);
 app.use("/lesson", require("./routes/api/lesson"));
