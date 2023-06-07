@@ -11,7 +11,7 @@ const Authentification = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
+  // const from = location.state?.from?.pathname || '/';
   const userRef = useRef();
   const errRef = useRef();
 
@@ -38,18 +38,17 @@ const Authentification = () => {
           withCredentials: true
         });
 
-        console.log(JSON.stringify(response.data));
+       
         const accessToken = response?.data?.accessToken;
         const roles = response?.data?.roles;
         const refreshToken = response?.data?.refreshToken;
-        console.log(user);
+        const id = response?.data?.id;
+
         
-        // Problème avec cette méthode
-        setAuth({user, pwd, roles, accessToken, refreshToken});
-        console.log('après setAuth');
+        setAuth({user, roles, accessToken, refreshToken, id});
         setUser("");
         setPwd("");
-        navigate(from, { replace: true });
+        navigate('/dashboard', { replace: true });
        
      
       

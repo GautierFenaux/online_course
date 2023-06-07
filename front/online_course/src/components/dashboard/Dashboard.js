@@ -18,7 +18,7 @@ const Dashboard = () => {
   return (
     <section>
       <button onClick={signOut}>Se déconnecter</button>
-    <MyCalendar />
+      <MyCalendar />
     </section>
   )
 }

@@ -20,7 +20,8 @@ export const useRefreshToken = () => {
         console.log(response.data.token)
         return {...prev, 
             roles: response.data.roles,
-            accessToken: response.data.accessToken 
+            accessToken: response.data.accessToken,
+            id: response.data.id
         }
     })
     return response.data.accessToken ;

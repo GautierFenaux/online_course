@@ -1,16 +1,14 @@
 import FullCalendar from "@fullcalendar/react";
 import daygridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from '@fullcalendar/timegrid'
+import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import react, { useState, useRef } from "react";
-import { v4 as uuid } from "uuid";
+import react, { useState, useRef, useEffect } from "react";
 import ModalCalendar from "./modal_calendar/ModalCalendar";
-import './mycalendar.css';
-
+import "./mycalendar.css";
+import axios from "../../../api/axios";
+import useAuth from "../../../hooks/useAuth";
 
 export const MyCalendar = () => {
-
-
   /*
   
   Création événément ok.
@@ -19,161 +17,224 @@ export const MyCalendar = () => {
   Faire modal avec l'événement sélectionner pour pouvoir le modifier : ok !
   Gérer la nouvelle heure de l'event lors du drop 
   Définir les routes en back
-  
-  
-  */ 
 
-  const EVENTPUT_URL = '/lesson'
+
+  Au moment de la fermeture de la modale faire une requête axios en post sur l'event qui vient d'être créé ou celui modifié
+  relier le user à la leçon côté back pour pouvoir les afficher sur son emploi du temps.
+  
+  
+  */
+
+
+
+
+  const LESSON_URL = "/lesson";
   const [events, setEvents] = useState([]);
   const [modal, setModal] = useState(false);
   const [date, setDate] = useState({});
   const calendarRef = useRef();
-  const [selectedEvent, setSelectedEvent] = useState(null)
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const { auth } = useAuth();
+
+  
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await axios.get(`${LESSON_URL}/user/${auth.id}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${auth.accessToken}`
+  //       }
+  //     });
+      
+  //     // Créer un objet de type event
+  //     setEvents(response.data);
+      
+  //   } catch (err) {
+  //     if (!err?.response) {
+  //       console.log("Err:", err);
+  //     }
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, [])
+
+  console.log(events)
 
 
   const handleSelect = (info) => {
-      setDate(info);
-      setModal(true);
-      // console.log(events)
-  }
+    setDate(info);
+    setModal(true);
+    // console.log(events)
+  };
   // Gérer la politique des données essentielles et non essentielles lors du create
 
   const handleModalConfirm = (instrument, topic, id) => {
     // console.log('handleModalConfirm active', "id ==>", id);
-    console.log(selectedEvent)
-    if(id) {
-      events.map((lesson, i) => { 
+    // console.log(selectedEvent);
+    if (id) {
+      events.map((lesson, i) => {
         if (lesson.id === id) {
-          
           let updatedEvents = [...events]; // Make a copy of the events array
           updatedEvents[i] = {
             ...lesson, // Copy the original lesson
             topic: topic,
-            instrument: instrument 
+            instrument: instrument,
           };
           setEvents(updatedEvents); // Update the events state with the modified array
         }
         setSelectedEvent(null);
-      })
+      });
+      
       // Mettre fonction post ici ? Récupérer l'id au niveau du back
-    //   async () => {
-    //     try {
-    //       const response = await axios.post(REGISTER_URL, JSON.stringify({
-    //             username: informations.username,
-    //             email: informations.email,
-    //             password: informations.password,
-    //             level: level,
-    //             styles: styles
-    //           }), {
-    //             headers: {'Content-Type': 'application/json'},
-    //             withCredentials: true
-    //           });
-    //           console.log(response.data);
-    //           console.log(JSON.stringify(response));
-    //     } catch (err) {
-    //       if(!err?.response) {
-    //           console.log('Err:', err);
-    //       }
-    //     }
-    // }
-    } else if (topic) {
-      setEvents([
-        ...events,
-        {
-          start : date.start,
-          end : date.end,
-          topic: topic,
-          instrument : instrument,
-          id: uuid(),
-        },
-      ]);
-      //   async () => {
-    //     try {
-    //       const response = await axios.post(REGISTER_URL, JSON.stringify({
-    //             username: informations.username,
-    //             email: informations.email,
-    //             password: informations.password,
-    //             level: level,
-    //             styles: styles
-    //           }), {
-    //             headers: {'Content-Type': 'application/json'},
-    //             withCredentials: true
-    //           });
-    //           console.log(response.data);
-    //           console.log(JSON.stringify(response));
-    //     } catch (err) {
-    //       if(!err?.response) {
-    //           console.log('Err:', err);
-    //       }
-    //     }
-    // }
+      (async () => {
+        try {
+          const response = await axios.post(
+            LESSON_URL,
+            JSON.stringify({
+              startDate: date.start,
+              endDate: date.end,
+              instrument: instrument,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${auth.accessToken}`,
+              },
+              withCredentials: true,
+            }
+          );
+          console.log(response.data);
+          console.log(JSON.stringify(response));
+        } catch (err) {
+          if (!err?.response) {
+            console.log("Err:", err);
+          }
+        }
+      })();
+    } else if (!id) {
+      (async () => {
+        try {
+          const response = await axios.post(
+            LESSON_URL,
+            JSON.stringify({
+              startDate: date.start,
+              endDate: date.end,
+              instrument: instrument,
+              id: `${auth.id}`
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${auth.accessToken}`,
+              },
+            }
+          );
+          setEvents([
+            ...events,
+            {
+              start: date.start,
+              end: date.end,
+              topic: topic,
+              instrument: instrument,
+              id: response.data.id,
+            },
+          ]);
+        } catch (err) {
+          if (!err?.response) {
+            console.log("Err:", err);
+          }
+        }
+      })();
     }
-    
+
     setModal(false);
   };
-
+  // console.log(events);
   // console.log(events);
 
-  const handleDateClick = (arg) => { // bind with an arrow function
+  const handleDateClick = (arg) => {
+    // bind with an arrow function
 
-    console.log(calendarRef.current.getApi());
+    // console.log(calendarRef.current.getApi());
     // console.log(arg);
-    }
- 
-    const handleEventClick = (event) => {
-      setSelectedEvent(event.event);
-      // console.log(event)
-    }
-  
-  
+  };
 
-    const handleResize = (info) => {
-      // Récupérer l'event qui a cet id dans le tableau des event et le modifier
-      // console.log('infoEventEnd : ',info.event.end);
+  const handleEventClick = (event) => {
+    // setSelectedEvent(event.event);
+    // console.log(event)
+  };
 
-      
-      // console.log('events before Resize : ', events)
+  const handleResize = (info) => {
+    // Récupérer l'event qui a cet id dans le tableau des event et le modifier
+    // console.log('infoEventEnd : ',info.event.end);
 
-      events.map((lesson, i) => { 
-        if (lesson.id === info.event.id) {
-          let updatedEvents = [...events]; // Make a copy of the events array
-          updatedEvents[i] = {
-            ...lesson, // Copy the original lesson
-            end: info.event.end // Update the end time
-          };
-          setEvents(updatedEvents); // Update the events state with the modified array
+    // console.log('events before Resize : ', events)
+    console.log(info.event.end);
+    events.map((lesson, i) => {
+      if (lesson.id === info.event.id) {
+        let updatedEvents = [...events]; // Make a copy of the events array
+        updatedEvents[i] = {
+          ...lesson, // Copy the original lesson
+          end: info.event.end, // Update the end time
+        };
+        setEvents(updatedEvents); // Update the events state with the modified array
+      }
+    });
+    console.log(info.event.end);
+    (async () => {
+      try {
+        const response = await axios.put(
+          LESSON_URL,
+          JSON.stringify({
+            endDate: info.event.end,
+            id: info.event.id
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.accessToken}`,
+            },
+            withCredentials: true,
+          }
+        );
+        console.log(response.data.endDate);
+        // console.log(JSON.stringify(response));
+      } catch (err) {
+        if (!err?.response) {
+          console.log("Err:", err);
         }
-      })
-      
-      // console.log('events After Resize : ', events)
+      }
+    })();
 
-    }
-    const handleDrop = (info) => {
-      console.log(info.event.start)
-    }
+    // console.log('events After Resize : ', events)
+  };
+  const handleDrop = (info) => {
+    console.log(info.event.start);
+  };
   return (
     <div className="calendar-container">
-      <FullCalendar  
-       editable
-       selectable
+      <FullCalendar
+        editable
+        selectable
         events={events}
         // Trouver un moyen d'ouvrir la modale, permet d'obtenir les info startDate et endDate au clique
         select={handleSelect}
         eventClick={handleEventClick}
         headerToolbar={{
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
-        plugins={[ daygridPlugin, timeGridPlugin, interactionPlugin]}
+        plugins={[daygridPlugin, timeGridPlugin, interactionPlugin]}
         views={["dayGridMonth", "dayGridWeek", "dayGridDay"]}
-        initialView='timeGridDay'
+        initialView="timeGridDay"
         selectMirror={true}
         dayMaxEvents={true}
         eventOverlap={false}
         weekends={false}
-        slotMinTime="8:00:00"
-        slotMaxTime="23:00:00"
+        // slotMinTime="8:00:00"
+        // slotMaxTime="23:00:00"
         dateClick={handleDateClick}
         // Permet d'afficher les événements sur le
         // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
@@ -186,11 +247,18 @@ export const MyCalendar = () => {
         eventDrop={handleDrop}
       />
 
-      {modal && <ModalCalendar onConfirm={handleModalConfirm} closeModal={setModal} />}
-      {selectedEvent && <ModalCalendar selectedEvent={selectedEvent} closeModal={setModal}  onConfirm={handleModalConfirm} /> }
+      {modal && (
+        <ModalCalendar onConfirm={handleModalConfirm} closeModal={setModal} />
+      )}
+      {selectedEvent && (
+        <ModalCalendar
+          selectedEvent={selectedEvent}
+          closeModal={setModal}
+          onConfirm={handleModalConfirm}
+        />
+      )}
     </div>
   );
 };
 
-
-export default MyCalendar ;
+export default MyCalendar;

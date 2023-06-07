@@ -42,6 +42,7 @@ const handleLogin = async (req, res) => {
             { 
                 "username": foundUser.firstname,
                 "roles": roles,
+                "id": foundUser.id
             },
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '1d' }
@@ -50,9 +51,9 @@ const handleLogin = async (req, res) => {
         //Saving refreshToken with current user
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
-
+        console.log(foundUser.id);
         res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
-        res.json({roles: roles, username : foundUser.firstname, accessToken: accessToken, refreshToken: refreshToken });
+        res.json({roles: roles, username : foundUser.firstname, id: foundUser.id, accessToken: accessToken, refreshToken: refreshToken });
     } else {
         res.sendStatus(401);
     }

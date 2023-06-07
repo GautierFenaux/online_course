@@ -3,4 +3,14 @@ Options avancées :
 1.L'élève soummettra une demande au professeur que celui-ci validera ou non.
 
 
-// Faire la suppression de l'emploi du temps en même temps que celle du user.
+
+
+- Rediriger sur dashboard après connexion : ok !
+
+- Créer le dashboard : ok !
+
+- Optimiser CRUD pour gestion de l'emploi du temps : en cours !
+
+- Faire la suppression de l'emploi du temps en même temps que celle du user
+
+- Créer l'espace de la leçon
