@@ -6,7 +6,8 @@ import react, { useState, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import ModalCalendar from "./modal_calendar/ModalCalendar";
 import './mycalendar.css';
-
+import axios from "../../../api/axios";
+import useAuth from "../../../hooks/useAuth";
 
 export const MyCalendar = () => {
 
@@ -23,13 +24,15 @@ export const MyCalendar = () => {
   
   */ 
 
-  const EVENTPUT_URL = '/lesson'
+  const LESSON_URL = '/lesson'
   const [events, setEvents] = useState([]);
   const [modal, setModal] = useState(false);
   const [date, setDate] = useState({});
   const calendarRef = useRef();
   const [selectedEvent, setSelectedEvent] = useState(null)
+  const { auth } = useAuth();
 
+  console.log(auth.accessToken);
 
   const handleSelect = (info) => {
       setDate(info);
@@ -38,9 +41,9 @@ export const MyCalendar = () => {
   }
   // Gérer la politique des données essentielles et non essentielles lors du create
 
-  const handleModalConfirm = (instrument, topic, id) => {
+  const handleModalConfirm = async (instrument, topic, id) => {
     // console.log('handleModalConfirm active', "id ==>", id);
-    console.log(selectedEvent)
+    // console.log(selectedEvent)
     if(id) {
       events.map((lesson, i) => { 
         if (lesson.id === id) {
@@ -53,17 +56,15 @@ export const MyCalendar = () => {
           };
           setEvents(updatedEvents); // Update the events state with the modified array
         }
+        
         setSelectedEvent(null);
       })
-      // Mettre fonction post ici ? Récupérer l'id au niveau du back
-    //   async () => {
+    //   // Mettre fonction post ici ? Récupérer l'id au niveau du back
+    //   (async () => {
     //     try {
-    //       const response = await axios.post(REGISTER_URL, JSON.stringify({
-    //             username: informations.username,
-    //             email: informations.email,
-    //             password: informations.password,
-    //             level: level,
-    //             styles: styles
+    //       const response = await axios.post(LESSON_URL, JSON.stringify({
+    //           instrument: instrument,
+    //           topic: topic
     //           }), {
     //             headers: {'Content-Type': 'application/json'},
     //             withCredentials: true
@@ -75,7 +76,7 @@ export const MyCalendar = () => {
     //           console.log('Err:', err);
     //       }
     //     }
-    // }
+    // })
     } else if (topic) {
       setEvents([
         ...events,
@@ -86,37 +87,41 @@ export const MyCalendar = () => {
           instrument : instrument,
           id: uuid(),
         },
-      ]);
-      //   async () => {
-    //     try {
-    //       const response = await axios.post(REGISTER_URL, JSON.stringify({
-    //             username: informations.username,
-    //             email: informations.email,
-    //             password: informations.password,
-    //             level: level,
-    //             styles: styles
-    //           }), {
-    //             headers: {'Content-Type': 'application/json'},
-    //             withCredentials: true
-    //           });
-    //           console.log(response.data);
-    //           console.log(JSON.stringify(response));
-    //     } catch (err) {
-    //       if(!err?.response) {
-    //           console.log('Err:', err);
-    //       }
-    //     }
-    // }
+      ])
+
+    
+        try {
+          const response = await axios.post(LESSON_URL, JSON.stringify({
+              instrument: instrument,
+              topic: topic,
+              startDate: date.start,
+              endDate: date.end
+              }), {
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${auth.accessToken}`
+              },
+
+                withCredentials: true,
+              });
+              console.log(response.data);
+              console.log(JSON.stringify(response));
+        } catch (err) {
+          if(!err?.response) {
+              console.log('Err:', err);
+          }
+        }
+        setModal(false);
     }
     
-    setModal(false);
+    
   };
 
   // console.log(events);
 
   const handleDateClick = (arg) => { // bind with an arrow function
 
-    console.log(calendarRef.current.getApi());
+    // console.log(calendarRef.current.getApi());
     // console.log(arg);
     }
  
@@ -172,8 +177,8 @@ export const MyCalendar = () => {
         dayMaxEvents={true}
         eventOverlap={false}
         weekends={false}
-        slotMinTime="8:00:00"
-        slotMaxTime="23:00:00"
+        // slotMinTime="8:00:00"
+        // slotMaxTime="19:00:00"
         dateClick={handleDateClick}
         // Permet d'afficher les événements sur le
         // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed

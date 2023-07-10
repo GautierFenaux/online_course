@@ -1,5 +1,6 @@
 const verifyRoles = (allowedRoles) => {
     return (req, res, next) => {
+        console.log(req.roles);
         if(!req?.roles) return res.sendStatus(401);
         const roles = allowedRoles;
         
@@ -7,7 +8,7 @@ const verifyRoles = (allowedRoles) => {
         // console.log(req.roles);
 
         const result = req.roles === 'Teacher' ? true : false
-
+        
         if(!result) return res.sendStatus(401);
         next();
     }

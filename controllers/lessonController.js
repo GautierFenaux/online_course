@@ -14,8 +14,12 @@ const getAllLessons = async (req, res) => {
 Seul le professeur peut créer la leçon. 
 
 - Leçon relié à l'emploi du temps du professeur : ok -
+
 */
+
+
 const createNewLesson = async (req, res) => {
+  console.log(req)
   if (!req?.body?.numberOfHours || !req?.body?.instrument) {
     return res
       .status(400)
