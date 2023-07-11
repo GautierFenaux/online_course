@@ -11,8 +11,14 @@ router.route('/')
     .put(verifyRoles('Teacher'), lessonController.updateLesson)
     .delete(verifyRoles('Teacher'), lessonController.deleteLesson);
 
-router.route('/:id')
-    .get(lessonController.getLesson);
+router.route('/:userId')
+    .get(verifyRoles('Teacher'), lessonController.getUserLessons);
+
+
+// router.route('/:id')
+//     .get(lessonController.getLesson);
+
+
 
 
 module.exports = router;

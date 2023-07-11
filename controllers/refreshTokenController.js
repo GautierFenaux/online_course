@@ -11,7 +11,7 @@ const handleRefreshToken = async (req, res) => {
     const refreshToken = cookies.jwt;
     
     const foundUser = await User.findOne({where : { refreshToken : refreshToken }});
-    console.log(foundUser);
+    // console.log(foundUser);
     if(!foundUser) return res.sendStatus(401); //Unauthorized
 
     //Evaluate jwt
@@ -25,7 +25,8 @@ const handleRefreshToken = async (req, res) => {
                 { 
                     "UserInfo" : {
                         "username": decoded.username,
-                        "roles": roles
+                        "roles": roles,
+                        "id": foundUser.id
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,

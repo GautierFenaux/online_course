@@ -19,11 +19,11 @@ Seul le professeur peut créer la leçon.
 
 
 const createNewLesson = async (req, res) => {
-  console.log(req)
-  if (!req?.body?.numberOfHours || !req?.body?.instrument) {
+  // console.log(req)
+  if (!req?.body?.instrument) {
     return res
       .status(400)
-      .json({ message: "Veuillez donner un nombre d'heure ou un instrument." });
+      .json({ message: "Veuillez donner un instrument." });
   }
 
   const token = req.headers.authorization?.split(' ')[1];
@@ -35,13 +35,15 @@ const createNewLesson = async (req, res) => {
       {
         // numberOfHours: req.body.numberOfHours,
         instrument: req.body.instrument,
+        topic: req.body.topic,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
       },
     );
     
     const timetable = await Timetable.findOne({ where: { userId: decodedToken.UserInfo.id } });
-    const timetableLessonRelation = await TimetableLesson.create({ LessonID: lesson.id, TimetableID: timetable.id });
+    console.log(lesson.id, timetable.id)
+    const timetableLessonRelation = await TimetableLesson.create({ lessonId: lesson.id, timetableId: timetable.id });
     await timetableLessonRelation.save();
     res.status(201).json(lesson);
   } catch (err) {
@@ -88,16 +90,18 @@ const deleteLesson = async (req, res) => {
   res.json(result);
 };
 
-const getLesson = async (req, res) => {
-  if (!req?.params?.id)
+const getUserLessons = async (req, res) => {
+  console.log('getUserLessons activé');
+  console.log(req.params.userId);
+  if (!req?.params?.userId)
     return res.status(400).json({ message: `lesson ID is required` });
 
-  const lesson = await Lesson.findOne({ where: { id: req.params.id }});
+  const lesson = await Lesson.findOne({ where: { id: req.params.userId }});
 
   if (!lesson) {
     return res
       .status(204)
-      .json({ message: `lesson ID ${req.body.id} not found` });
+      .json({ message: `lesson ID ${req.body.userId} not found` });
   }
   res.json(lesson);
 };
@@ -107,5 +111,5 @@ module.exports = {
   createNewLesson,
   updateLesson,
   deleteLesson,
-  getLesson,
+  getUserLessons,
 };
