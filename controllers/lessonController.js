@@ -1,6 +1,8 @@
 const Lesson = require("../models/Lesson");
 const Timetable = require("../models/Timetable");
 const TimetableLesson = require('../models/relation/TimetableLessons');
+const UserLesson = require('../models/relation/UserLessons');
+const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
 
@@ -41,10 +43,16 @@ const createNewLesson = async (req, res) => {
       },
     );
     
-    const timetable = await Timetable.findOne({ where: { userId: decodedToken.UserInfo.id } });
-    console.log(lesson.id, timetable.id)
-    const timetableLessonRelation = await TimetableLesson.create({ lessonId: lesson.id, timetableId: timetable.id });
-    await timetableLessonRelation.save();
+    // const timetable = await Timetable.findOne({ where: { userId: decodedToken.UserInfo.id } });
+    // console.log(lesson.id, timetable.id)
+    // const timetableLessonRelation = await TimetableLesson.create({ lessonId: lesson.id, timetableId: timetable.id });
+    // await timetableLessonRelation.save();
+    
+    const user = await User.findOne({ where: { id : decodedToken.UserInfo.id } });
+    const userLessonRelation = await UserLesson.create({ lessonId: lesson.id, userId: user.id });
+    await userLessonRelation.save();
+
+
     res.status(201).json(lesson);
   } catch (err) {
     console.log(err);
@@ -91,19 +99,26 @@ const deleteLesson = async (req, res) => {
 };
 
 const getUserLessons = async (req, res) => {
+
+  /* 
+  Récupérer l'emploi du temps et aller chercher les leçons via la table timetable_lesson ou via user_lesson ?
+  
+  How to fetch data from relation table with express
+  
+  */
   console.log('getUserLessons activé');
   console.log(req.params.userId);
   if (!req?.params?.userId)
     return res.status(400).json({ message: `lesson ID is required` });
 
-  const lesson = await Lesson.findOne({ where: { id: req.params.userId }});
-
-  if (!lesson) {
+  const userLessons = await UserLesson.findAll({ where: { userId: req.params.userId }, include: Lesson});
+  console.log({userLessons})
+  if (!userLessons) {
     return res
       .status(204)
-      .json({ message: `lesson ID ${req.body.userId} not found` });
+      .json({ message: `Vous n'avez aucune leçon de prévu` });
   }
-  res.json(lesson);
+  res.json(userLessons);
 };
 
 module.exports = {

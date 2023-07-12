@@ -21,12 +21,12 @@ export const MyCalendar = () => {
   Faire modal avec l'événement sélectionner pour pouvoir le modifier : ok !
   Gérer la nouvelle heure de l'event lors du drop 
   
-  
-  Revoir au niveau du back les informations passées.
-  Avoir les id au niveau du front ?
-
-  Faire affichage des leçons getUserLessons()
+  Faire affichage des leçons getUserLessons(),
   Gérer les headers avec l'authorization
+
+
+  voir comment est foutu un event sur pour qu'il soit passé dans l'emploi du temps.
+
   */ 
 
   const LESSON_URL = '/lesson';
@@ -63,14 +63,17 @@ const options = {
             withCredentials: true,
           });
           console.log(response.data);
-          console.log(JSON.stringify(response));
-    data = response ; 
+    data = response.data ; 
     } catch (err) {
       if(!err?.response) {
           console.log('Err:', err);
       }
     }
-    console.log(data);
+    //Faire un map des data pour les afficher dans les events.
+    data.map((lesson) => {
+      console.log({lesson})
+      setEvents(lesson) ;
+    })
     
   }
 
@@ -141,8 +144,8 @@ const options = {
                 headers: options,
                 withCredentials: true,
               });
-              console.log(response.data);
-              console.log(JSON.stringify(response));
+              // console.log(response.data);
+              // console.log(JSON.stringify(response));
         } catch (err) {
           if(!err?.response) {
               console.log('Err:', err);

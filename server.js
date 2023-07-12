@@ -27,6 +27,8 @@ const Instrument = require("./models/Instrument");
 const Style = require("./models/Style");
 const UserStyle = require("./models/relation/UserStyle");
 const UserInstrument = require("./models/relation/UserInstrument");
+const UserLessons = require("./models/relation/UserLessons");
+
 
 
 app.use(express.urlencoded({ extended: false }));
@@ -94,7 +96,10 @@ const initApp = async () => {
     });
     UserInstrument.sync({
         alter: true,
-    })
+    });
+    UserLessons.sync({
+      alter: true,
+    });
     /**
      * Start the web server on the specified port.
      */

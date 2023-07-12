@@ -26,9 +26,6 @@ const Lesson = sequelize.define("lesson", {
     },
     });
 
-    // Lesson.associate = (models) => {
-    //     Lesson.belongsToMany(models.Timetable, { as: 'LessonsInTimetable', through: models.TimetableLesson, foreignKey: 'lessonID'});
-    // }
-    // Lesson.belongsToMany(Timetable, { through: 'Timetable_Lesson' });
+    
 
 module.exports = Lesson;
