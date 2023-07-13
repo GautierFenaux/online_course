@@ -24,7 +24,9 @@ const Lesson = sequelize.define("lesson", {
     instrument: {
         type: DataTypes.STRING(100),
     },
-    });
+
+    
+    }, { onDelete: 'cascade' });
 
     
 

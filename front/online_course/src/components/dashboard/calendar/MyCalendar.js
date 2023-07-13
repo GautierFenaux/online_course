@@ -21,7 +21,7 @@ export const MyCalendar = () => {
   Faire modal avec l'événement sélectionner pour pouvoir le modifier : ok !
   Gérer la nouvelle heure de l'event lors du drop 
   
-  Faire affichage des leçons getUserLessons(),
+  Faire affichage des leçons getuserLessons(),
   Gérer les headers avec l'authorization
 
 
@@ -70,10 +70,21 @@ const options = {
       }
     }
     //Faire un map des data pour les afficher dans les events.
-    data.map((lesson) => {
-      console.log({lesson})
-      setEvents(lesson) ;
-    })
+    if (data) 
+      data.map(userLesson => {
+        console.log(userLesson.lesson);
+        // setEvents(userLesson.lesson) ;
+        setEvents(events => [
+          ...events,
+          {
+            start : userLesson.lesson.startDate,
+            end : userLesson.lesson.endDate,
+            topic: userLesson.lesson.topic,
+            instrument : userLesson.lesson.instrument,
+            id: userLesson.lesson.id,
+          }
+        ])
+      })
     
   }
 
@@ -81,7 +92,7 @@ const options = {
   displayLessons();
   }, []);
 
-
+  console.log(events)
 
   // Gérer la politique des données essentielles et non essentielles lors du create
   // console.log(selectedEvent);
@@ -122,6 +133,7 @@ const options = {
         // }
 
     } else if (topic) {
+      console.log(events)
       setEvents([
         ...events,
         {
@@ -167,7 +179,7 @@ const options = {
  
     const handleEventClick = (event) => {
       setSelectedEvent(event.event);
-      // console.log(event)
+      console.log(event)
     }
   
   

@@ -111,7 +111,13 @@ const getUserLessons = async (req, res) => {
   if (!req?.params?.userId)
     return res.status(400).json({ message: `lesson ID is required` });
 
-  const userLessons = await UserLesson.findAll({ where: { userId: req.params.userId }, include: Lesson});
+  const userLessons = await UserLesson.findAll({
+    where: { 
+      userId: req.params.userId 
+    }
+    , 
+    include: [{model: Lesson, attributes: ['topic', 'instrument', 'endDate', 'startDate', 'id']}]
+  });
   console.log({userLessons})
   if (!userLessons) {
     return res
