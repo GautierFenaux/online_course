@@ -15,9 +15,8 @@ export const useRefreshToken = () => {
         refreshToken : `${auth.refreshToken}`,
         
     });
-    
     setAuth(prev => {
-        console.log(response.data.token)
+        console.log(response.data.accessToken)
         return {...prev, 
             roles: response.data.roles,
             accessToken: response.data.accessToken 

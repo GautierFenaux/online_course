@@ -35,15 +35,17 @@ export const MyCalendar = () => {
   const [modal, setModal] = useState(false);
   const [date, setDate] = useState({});
   const calendarRef = useRef();
-  const [selectedEvent, setSelectedEvent] = useState(null)
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const { auth } = useAuth();
+  
+  const accessToken = auth?.accessToken;
 const options = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${auth.accessToken}`
+    'Authorization': `Bearer ${auth?.accessToken}`,
   };
 
   // console.log(auth.accessToken);
-
+  // console.log({events})
   const handleSelect = (info) => {
       setDate(info);
       setModal(true);
@@ -69,11 +71,13 @@ const options = {
           console.log('Err:', err);
       }
     }
-    //Faire un map des data pour les afficher dans les events.
+    // Si les leçons existent déjà dans events ne peut pas les ajouter.
+    // Faire un map des data pour les afficher dans les events.
     if (data) 
-      data.map(userLesson => {
-        console.log(userLesson.lesson);
+      data.map((userLesson, i) => {
+        console.log({userLesson});
         // setEvents(userLesson.lesson) ;
+        console.log(i, userLesson)
         setEvents(events => [
           ...events,
           {
@@ -84,15 +88,16 @@ const options = {
             id: userLesson.lesson.id,
           }
         ])
+        console.log(events)
       })
-    
+      
   }
 
+  console.log({events})
   useEffect(() => {
-  displayLessons();
-  }, []);
-
-  console.log(events)
+    console.log('i');
+    displayLessons();
+  }, [accessToken]); // Use accessToken as the useEffect dependency
 
   // Gérer la politique des données essentielles et non essentielles lors du create
   // console.log(selectedEvent);
@@ -134,7 +139,7 @@ const options = {
 
     } else if (topic) {
       console.log(events)
-      setEvents([
+      setEvents(events => [
         ...events,
         {
           start : date.start,
