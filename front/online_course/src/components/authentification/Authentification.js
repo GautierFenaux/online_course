@@ -49,7 +49,7 @@ const Authentification = () => {
         console.log('après setAuth');
         setUser("");
         setPwd("");
-        navigate(from, { replace: true });
+        navigate('/dashboard');
        
      
       

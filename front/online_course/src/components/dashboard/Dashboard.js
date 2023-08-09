@@ -11,7 +11,7 @@ const Dashboard = () => {
    
   const navigate = useNavigate();
   const logout = useLogout();
-  const { accessToken } = useAuth();
+  
   
     const signOut = async () => {
       await logout();

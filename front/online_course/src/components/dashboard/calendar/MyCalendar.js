@@ -38,8 +38,8 @@ export const MyCalendar = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { auth } = useAuth();
   
-  const accessToken = auth?.accessToken;
-const options = {
+  // console.log('accessToken dans MyCalendar =>', accessToken)
+  const options = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${auth?.accessToken}`,
   };
@@ -47,14 +47,14 @@ const options = {
   // console.log(auth.accessToken);
   // console.log({events})
   const handleSelect = (info) => {
-      setDate(info);
+      setDate(info);  
       setModal(true);
       // console.log(events)
   }
  
   const displayLessons = async () => {
 
-    const decodedToken = jwt_decode(auth.accessToken);
+    const decodedToken = jwt_decode(auth?.accessToken);
     
     let data ;
     try {
@@ -64,7 +64,6 @@ const options = {
             headers: options,
             withCredentials: true,
           });
-          console.log(response.data);
     data = response.data ; 
     } catch (err) {
       if(!err?.response) {
@@ -75,9 +74,9 @@ const options = {
     // Faire un map des data pour les afficher dans les events.
     if (data) 
       data.map((userLesson, i) => {
-        console.log({userLesson});
+        // console.log({userLesson});
         // setEvents(userLesson.lesson) ;
-        console.log(i, userLesson)
+        // console.log(userLesson)
         setEvents(events => [
           ...events,
           {
@@ -88,16 +87,14 @@ const options = {
             id: userLesson.lesson.id,
           }
         ])
-        console.log(events)
       })
       
   }
-
   console.log({events})
   useEffect(() => {
-    console.log('i');
+    console.log('i de use effect');
     displayLessons();
-  }, [accessToken]); // Use accessToken as the useEffect dependency
+  }, []);
 
   // Gérer la politique des données essentielles et non essentielles lors du create
   // console.log(selectedEvent);
