@@ -22,9 +22,6 @@ export const MyCalendar = () => {
   Gérer la nouvelle heure de l'event lors du drop 
   
   Faire affichage des leçons getuserLessons(),
-  Gérer les headers avec l'authorization
-
-
   voir comment est foutu un event sur pour qu'il soit passé dans l'emploi du temps.
 
   */ 
@@ -37,7 +34,8 @@ export const MyCalendar = () => {
   const calendarRef = useRef();
   const [selectedEvent, setSelectedEvent] = useState(null);
   const { auth } = useAuth();
-  
+  const decodedToken = jwt_decode(auth?.accessToken);
+  let data ;
   // console.log('accessToken dans MyCalendar =>', accessToken)
   const options = {
     'Content-Type': 'application/json',
@@ -54,9 +52,8 @@ export const MyCalendar = () => {
  
   const displayLessons = async () => {
 
-    const decodedToken = jwt_decode(auth?.accessToken);
     
-    let data ;
+    
     try {
       const response = await axios.get(`${LESSON_URL}/${decodedToken.UserInfo.id}`,
       
@@ -90,9 +87,8 @@ export const MyCalendar = () => {
       })
       
   }
-  console.log({events})
+  
   useEffect(() => {
-    console.log('i de use effect');
     displayLessons();
   }, []);
 
@@ -165,13 +161,36 @@ export const MyCalendar = () => {
               console.log('Err:', err);
           }
         }
+
+        try {
+          const response = await axios.get(`${LESSON_URL}/${decodedToken.UserInfo.id}/lastLesson`,
+          {
+                headers: options,
+                withCredentials: true,
+              });
+        data = response.data
+        } catch (err) {
+          if(!err?.response) {
+              console.log('Err:', err);
+          }
+        }
+        
+        if (data) {
+          const updatedEvents = [...events]; // Create a copy of the events array
+          updatedEvents[updatedEvents.length - 1] = { ...updatedEvents[updatedEvents.length - 1], id: data.lessonId };
+          setEvents(updatedEvents);
+        }
+        
+        
+      
+
         setModal(false);
     }
     
     
   };
 
-  // console.log(events);
+  console.log(events);
 
   const handleDateClick = (arg) => { // bind with an arrow function
 
@@ -185,34 +204,56 @@ export const MyCalendar = () => {
     }
   
   
-
-    const handleResize = (info) => {
+    // Mettre la fonction en async, voir pourquoi les events ne sont pas à jour dans la fonction même
+    const handleResize = async (info) => {
       // Récupérer l'event qui a cet id dans le tableau des event et le modifier
       // console.log('infoEventEnd : ',info.event.end);
+      console.log(info.event.end);
+      console.log(info.event.end.toUTCString());
 
-      
-      // console.log('events before Resize : ', events)
+      const currentLessonIndex = events.findIndex((event) => event.id === Number(info.event.id) || event.id === info.event.id);
+      console.log(currentLessonIndex)
+      const updatedLesson = {...events[currentLessonIndex], end: new Date(info.event.end.toUTCString()).toISOString()};
+      const newLessons = [...events];
+      newLessons[currentLessonIndex] = updatedLesson;
+      setEvents(newLessons);
 
-      events.map((lesson, i) => { 
-        if (lesson.id === info.event.id) {
-          let updatedEvents = [...events]; // Make a copy of the events array
-          updatedEvents[i] = {
-            ...lesson, // Copy the original lesson
-            end: info.event.end // Update the end time
-          };
-          setEvents(updatedEvents); // Update the events state with the modified array
-        }
-      })
-      
-      // console.log('events After Resize : ', events)
+      console.log(info.event._def.defId)
+      console.log(events)
+    }
+   
+    const sendDataOfHandleResize = async () => {
+      await handleResize() 
+
+      // try {
+      //   const response = await axios.put(LESSON_URL, JSON.stringify({
+      //       instrument: instrument,
+      //       topic: topic
+      //       }), {
+      //         headers: options,
+      //         withCredentials: true
+      //       });
+      //       console.log(response.data);
+      //       console.log(JSON.stringify(response));
+      // } catch (err) {
+      //   if(!err?.response) {
+      //       console.log('Err:', err);
+      //   }
+      // }
 
     }
+
+
+
+    console.log(events)
     const handleDrop = (info) => {
       console.log(info.event.start)
     }
+
   return (
     <div className="calendar-container">
-      <FullCalendar  
+      <FullCalendar
+       timeZone='UTC' 
        editable
        selectable
         events={events}
@@ -231,8 +272,8 @@ export const MyCalendar = () => {
         dayMaxEvents={true}
         eventOverlap={false}
         weekends={false}
-        // slotMinTime="8:00:00"
-        // slotMaxTime="19:00:00"
+        slotMinTime="8:00:00"
+        slotMaxTime="22:00:00"
         dateClick={handleDateClick}
         // Permet d'afficher les événements sur le
         // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed

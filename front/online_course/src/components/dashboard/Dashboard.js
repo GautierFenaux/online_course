@@ -21,12 +21,13 @@ const Dashboard = () => {
   return (
   
     <section>
-   
+  
       <button onClick={signOut}>Se déconnecter</button>
       <MyCalendar />
-     
+    
     </section>
   )
+
 }
 
-export default Dashboard
+export default Dashboard ;

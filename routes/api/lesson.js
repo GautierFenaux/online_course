@@ -15,6 +15,9 @@ router.route('/:userId')
     .get(verifyRoles('Teacher'), lessonController.getUserLessons);
 
 
+    router.route('/:userId/lastLesson')
+    .get(verifyRoles('Teacher'), lessonController.getUserLesson);
+
 // router.route('/:id')
 //     .get(lessonController.getLesson);
 

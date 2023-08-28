@@ -109,7 +109,7 @@ const getUserLessons = async (req, res) => {
   console.log('getUserLessons activé');
   console.log(req.params.userId);
   if (!req?.params?.userId)
-    return res.status(400).json({ message: `lesson ID is required` });
+    return res.status(400).json({ message: `userId is required` });
 
   const userLessons = await UserLesson.findAll({
     where: { 
@@ -127,10 +127,34 @@ const getUserLessons = async (req, res) => {
   res.json(userLessons);
 };
 
+const getUserLesson = async (req, res) => {
+
+  console.log('getUserLessons activé');
+  console.log(req.params.userId);
+  if (!req?.params?.userId)
+    return res.status(400).json({ message: `lesson ID is required` });
+
+  const userLesson = await UserLesson.findOne({
+    where: { 
+      userId: req.params.userId,
+    }, 
+    order: [ [ 'id', 'DESC' ]],
+    include: [{model: Lesson, attributes: ['topic', 'instrument', 'endDate', 'startDate', 'id']}]
+  });
+  console.log({userLesson})
+  if (!userLesson) {
+    return res
+      .status(204)
+      .json({ message: `Vous n'avez aucune leçon de prévu` });
+  }
+  res.json(userLesson);
+};
+
 module.exports = {
   getAllLessons,
   createNewLesson,
   updateLesson,
   deleteLesson,
+  getUserLesson,
   getUserLessons,
 };
