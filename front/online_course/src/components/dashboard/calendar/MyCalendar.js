@@ -77,11 +77,11 @@ export const MyCalendar = () => {
         setEvents(events => [
           ...events,
           {
+            id: userLesson.lesson.id,
             start : userLesson.lesson.startDate,
             end : userLesson.lesson.endDate,
             topic: userLesson.lesson.topic,
             instrument : userLesson.lesson.instrument,
-            id: userLesson.lesson.id,
           }
         ])
       })
@@ -131,7 +131,6 @@ export const MyCalendar = () => {
         // }
 
     } else if (topic) {
-      console.log(events)
       setEvents(events => [
         ...events,
         {
@@ -169,6 +168,7 @@ export const MyCalendar = () => {
                 withCredentials: true,
               });
         data = response.data
+        
         } catch (err) {
           if(!err?.response) {
               console.log('Err:', err);
@@ -177,7 +177,13 @@ export const MyCalendar = () => {
         
         if (data) {
           const updatedEvents = [...events]; // Create a copy of the events array
-          updatedEvents[updatedEvents.length - 1] = { ...updatedEvents[updatedEvents.length - 1], id: data.lessonId };
+          console.log('length ==>', updatedEvents.length, 'length -1 ==>', updatedEvents.length) ;
+          updatedEvents[updatedEvents.length] = { ...updatedEvents[updatedEvents.length - 1], id: data.lessonId, 
+            start: data.lesson.startDate, 
+            end: data.lesson.endDate, 
+            topic: data.lesson.topic, 
+            instrument: data.lesson.instrument 
+          };
           setEvents(updatedEvents);
         }
         
@@ -200,7 +206,6 @@ export const MyCalendar = () => {
  
     const handleEventClick = (event) => {
       setSelectedEvent(event.event);
-      console.log(event)
     }
   
   
@@ -244,8 +249,6 @@ export const MyCalendar = () => {
     }
 
 
-
-    console.log(events)
     const handleDrop = (info) => {
       console.log(info.event.start)
     }
