@@ -154,8 +154,6 @@ export const MyCalendar = () => {
                 headers: options,
                 withCredentials: true,
               });
-              // console.log(response.data);
-              // console.log(JSON.stringify(response));
         } catch (err) {
           if(!err?.response) {
               console.log('Err:', err);
@@ -214,9 +212,6 @@ export const MyCalendar = () => {
     // Mettre la fonction en async, voir pourquoi les events ne sont pas à jour dans la fonction même
     const handleResize = async (info) => {
       
-      console.log(info.event.end);
-      console.log(new Date(info.event.end.toISOString()));
-     
       const currentLessonIndex = events.findIndex((event) => event.id === Number(info.event.id));
       
       const updatedLesson = {...events[currentLessonIndex], end: new Date(info.event.end.toUTCString()).toISOString()};
@@ -240,14 +235,41 @@ export const MyCalendar = () => {
         }
       }
 
-      console.log(info.event._def.defId)
-      console.log(events)
+  
     }
 
 
-    const handleDrop = (info) => {
-      console.log(info.event.start)
-      console.log(info.event.end)
+    const handleDrop = async (info) => {
+
+      const currentLessonIndex = events.findIndex((event) => event.id === Number(info.event.id));
+      // end:  new Date(info.event.end.toUTCString()).toISOString()
+      console.log('infoEnd ', info.event.end);
+      const updatedLesson = {...events[currentLessonIndex], 
+        start: new Date(info.event.start.toUTCString()).toISOString(),
+        end:  new Date(info.event.end.toUTCString()).toISOString()
+      };
+      const newLessons = [...events];
+      newLessons[currentLessonIndex] = updatedLesson;
+      setEvents(newLessons);
+
+      try {
+        const response = await axios.put(LESSON_URL, JSON.stringify({
+            id : info.event.id,
+            startDate: new Date(info.event.start),
+            endDate: new Date(info.event.end),
+
+            }), {
+              headers: options,
+              withCredentials: true,
+            });
+            // console.log(response.data);
+            // console.log(JSON.stringify(response));
+      } catch (err) {
+        if(!err?.response) {
+            console.log('Err:', err);
+        }
+      }
+      
     }
 
   return (

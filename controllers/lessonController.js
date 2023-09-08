@@ -31,11 +31,9 @@ const createNewLesson = async (req, res) => {
   const token = req.headers.authorization?.split(' ')[1];
   const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-  console.log(req.body.startDate)
   try {
     const lesson = await Lesson.create(
       {
-        // numberOfHours: req.body.numberOfHours,
         instrument: req.body.instrument,
         topic: req.body.topic,
         startDate: req.body.startDate,
@@ -43,10 +41,6 @@ const createNewLesson = async (req, res) => {
       },
     );
     
-    // const timetable = await Timetable.findOne({ where: { userId: decodedToken.UserInfo.id } });
-    // console.log(lesson.id, timetable.id)
-    // const timetableLessonRelation = await TimetableLesson.create({ lessonId: lesson.id, timetableId: timetable.id });
-    // await timetableLessonRelation.save();
     
     const user = await User.findOne({ where: { id : decodedToken.UserInfo.id } });
     const userLessonRelation = await UserLesson.create({ lessonId: lesson.id, userId: user.id });
@@ -65,8 +59,7 @@ const updateLesson = async (req, res) => {
       .status(400)
       .json({ message: `lesson ID ${req.body.id} not found` });
   }
-  console.log('updateLesson actived');
-  console.log(req.body.id);
+
   const lesson = await Lesson.findByPk(req.body.id);
 
   if (!lesson) {
@@ -74,11 +67,10 @@ const updateLesson = async (req, res) => {
       .status(204)
       .json({ message: `No lesson matches ID : ${req.body.id} ` });
   }
-  console.log(lesson.id);
+  
+  if (req.body?.startDate) lesson.startDate = req.body.startDate;
   if (req.body?.endDate) lesson.endDate = req.body.endDate;
   const result = await lesson.save();
-  res.json(result);
-  // console.log(result)
 };
 
 const deleteLesson = async (req, res) => {
@@ -107,8 +99,7 @@ const getUserLessons = async (req, res) => {
   How to fetch data from relation table with express
   
   */
-  // console.log('getUserLessons activé');
-  // console.log(req.params.userId);
+
   if (!req?.params?.userId)
     return res.status(400).json({ message: `userId is required` });
 
