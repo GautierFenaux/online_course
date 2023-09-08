@@ -93,10 +93,9 @@ export const MyCalendar = () => {
   }, []);
 
   // Gérer la politique des données essentielles et non essentielles lors du create
-  // console.log(selectedEvent);
+ 
   const handleModalConfirm = async (instrument, topic, id) => {
-    // console.log('handleModalConfirm active', "id ==>", id);
-    // console.log(selectedEvent)
+   
     
     if(id) {
       events.map((lesson, i) => { 
@@ -129,8 +128,9 @@ export const MyCalendar = () => {
         //       console.log('Err:', err);
         //   }
         // }
-
+      
     } else if (topic) {
+      console.log(date.start)
       setEvents(events => [
         ...events,
         {
@@ -144,6 +144,7 @@ export const MyCalendar = () => {
 
     
         try {
+          console.log(date.start)
           const response = await axios.post(LESSON_URL, JSON.stringify({
               instrument: instrument,
               topic: topic,
@@ -174,11 +175,12 @@ export const MyCalendar = () => {
               console.log('Err:', err);
           }
         }
-        
+       
         if (data) {
           const updatedEvents = [...events]; // Create a copy of the events array
-          console.log('length ==>', updatedEvents.length, 'length -1 ==>', updatedEvents.length) ;
-          updatedEvents[updatedEvents.length] = { ...updatedEvents[updatedEvents.length - 1], id: data.lessonId, 
+          updatedEvents[updatedEvents.length] = 
+          {
+            id: data.lessonId, 
             start: data.lesson.startDate, 
             end: data.lesson.endDate, 
             topic: data.lesson.topic, 
@@ -211,46 +213,41 @@ export const MyCalendar = () => {
   
     // Mettre la fonction en async, voir pourquoi les events ne sont pas à jour dans la fonction même
     const handleResize = async (info) => {
-      // Récupérer l'event qui a cet id dans le tableau des event et le modifier
-      // console.log('infoEventEnd : ',info.event.end);
+      
       console.log(info.event.end);
-      console.log(info.event.end.toUTCString());
-
-      const currentLessonIndex = events.findIndex((event) => event.id === Number(info.event.id) || event.id === info.event.id);
-      console.log(currentLessonIndex)
+      console.log(new Date(info.event.end.toISOString()));
+     
+      const currentLessonIndex = events.findIndex((event) => event.id === Number(info.event.id));
+      
       const updatedLesson = {...events[currentLessonIndex], end: new Date(info.event.end.toUTCString()).toISOString()};
       const newLessons = [...events];
       newLessons[currentLessonIndex] = updatedLesson;
       setEvents(newLessons);
 
+      try {
+        const response = await axios.put(LESSON_URL, JSON.stringify({
+            id : info.event.id,
+            endDate: new Date(info.event.end)
+            }), {
+              headers: options,
+              withCredentials: true,
+            });
+            // console.log(response.data);
+            // console.log(JSON.stringify(response));
+      } catch (err) {
+        if(!err?.response) {
+            console.log('Err:', err);
+        }
+      }
+
       console.log(info.event._def.defId)
       console.log(events)
-    }
-   
-    const sendDataOfHandleResize = async () => {
-      await handleResize() 
-
-      // try {
-      //   const response = await axios.put(LESSON_URL, JSON.stringify({
-      //       instrument: instrument,
-      //       topic: topic
-      //       }), {
-      //         headers: options,
-      //         withCredentials: true
-      //       });
-      //       console.log(response.data);
-      //       console.log(JSON.stringify(response));
-      // } catch (err) {
-      //   if(!err?.response) {
-      //       console.log('Err:', err);
-      //   }
-      // }
-
     }
 
 
     const handleDrop = (info) => {
       console.log(info.event.start)
+      console.log(info.event.end)
     }
 
   return (
